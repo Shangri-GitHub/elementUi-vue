@@ -3,6 +3,8 @@ const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const url = require('url')
 const publicPath = ''
+const OpenBrowserPlugin = require('open-browser-webpack-plugin')
+
 
 module.exports = (options = {}) => ({
   entry: {
@@ -41,16 +43,22 @@ module.exports = (options = {}) => ({
     ]
   },
   plugins: [
+    new webpack.ProvidePlugin({
+      jQuery: "jquery",
+      $: "jquery"
+    }),
     new webpack.optimize.CommonsChunkPlugin({
       names: ['vendor', 'manifest']
     }),
     new HtmlWebpackPlugin({
       template: 'src/index.html'
-    })
+    }),
+    new OpenBrowserPlugin({ url: 'http://localhost:8090' })
   ],
   resolve: {
     alias: {
-      '~': resolve(__dirname, 'src')
+      '~': resolve(__dirname, 'src'),
+      'vue':'vue/dist/vue.js'
     }
   },
   devServer: {
